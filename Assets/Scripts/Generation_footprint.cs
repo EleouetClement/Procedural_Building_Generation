@@ -148,6 +148,7 @@ public class Generation_footprint : MonoBehaviour
         return newPosition;
     }
 
+
     private Vector3 TurnLeft()
     {
         //Apply a negative rotation to the cursor 
