@@ -344,7 +344,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 0
   depth: 0
-  height: 0
-  step: 1
+  floorsCount: 3
+  widthStep: 1
+  heightStep: 1
   axiom: F-F-F-F
   pointPrefab: {fileID: 8849277698866286912, guid: 8ecb9981ab3f9054c8cf1c900d72bc94, type: 3}

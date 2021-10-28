@@ -7,26 +7,31 @@ public class Generation_footprint : MonoBehaviour
     // Building's footprint generation using L-system
     [SerializeField][Range(0, 10)] private int width;
     [SerializeField][Range(0, 10)] private int depth;
-    [SerializeField][Range(0, 10)] private int height;
-    [SerializeField] [Range(0, 2)] private int step;
+    [SerializeField][Range(1, 10)] private int floorsCount;
+    [SerializeField] [Range(0, 2)] private int widthStep;
+    [SerializeField] [Range(0, 2)] private int heightStep;
     [SerializeField] private string axiom;
     [SerializeField] private const char F = 'F';
     [SerializeField] private GameObject pointPrefab;
-    private List<GameObject> points;
+    private List<Vector3> points;
     private Dictionary<char, string> rules;
     private Vector3 direction;
     private Vector3 position;
     private int id = 0;
+    private int size;
 
 
     void Start()
     {
-        points = new List<GameObject>();
+        points = new List<Vector3>();
         Vector3 startPosition = Vector3.zero;
         Vector3 startDirection = Vector3.right;
         InitRules();
+
         GenerateFootPrint(startPosition, startDirection);
-        DrawFootPrint();
+        this.size = this.points.Count;
+        Build();
+        //DrawFootPrint();
     }
 
     // Update is called once per frame
@@ -35,12 +40,40 @@ public class Generation_footprint : MonoBehaviour
         
     }
 
+    private void Build()
+    {
+        //Build the building
+
+        //1st step adding the floors
+        for(int i = 1; i <= floorsCount; i++)
+        {
+            BuildFloor(i);
+        }
+    }
+
+    private void BuildFloor(int floorNumber)
+    {
+        //Add all the points needed for the floor
+        
+        for(int i = 0; i < size; i++)
+        {
+            Vector3 newPos = this.points[i] + (floorNumber * heightStep * Vector3.up);
+            this.points.Add(newPos);
+            GameObject go = Instantiate(pointPrefab, newPos, Quaternion.identity);
+            go.name = "" + id;
+            id++;
+        }
+    }
+
     private void InitRules()
     {
         rules = new Dictionary<char, string>();
         //Initiate All the Rules According to the inputs
         rules.Add(F, "F+F-F");
     }
+
+
+
 
     private void GenerateFootPrint(Vector3 startPosition, Vector3 startDirection)
     {
@@ -66,7 +99,7 @@ public class Generation_footprint : MonoBehaviour
                     ApplyRules(member);
                     break;
             }
-            
+          
         }
     }
 
@@ -105,13 +138,13 @@ public class Generation_footprint : MonoBehaviour
         //Instantiate a new point and add it to the List of points
         GameObject go = Instantiate(pointPrefab, this.position, Quaternion.identity);
         go.name = id.ToString();
-        this.points.Add(go);
+        this.points.Add(this.position);
     }
 
     private Vector3 MoveForward()
     {
         //Move the current cursor then put a new point at the location
-        Vector3 newPosition = this.position + (step * this.direction);
+        Vector3 newPosition = this.position + (widthStep * this.direction);
         return newPosition;
     }
 
@@ -136,14 +169,14 @@ public class Generation_footprint : MonoBehaviour
         //To check is the points are ok
         LineRenderer line = gameObject.AddComponent<LineRenderer>();
         line.positionCount = this.points.Count + 1;
-        line.startWidth = 1;
-        line.endWidth = 1;
+        line.startWidth = 0.3f;
+        line.endWidth = 0.3f;
         List<Vector3> positions = new List<Vector3>();
-        foreach(GameObject go in this.points)
+        foreach(Vector3 pos in this.points)
         {
-            positions.Add(go.transform.position);
+            positions.Add(pos);
         }
-        positions.Add(points[0].transform.position);
+        positions.Add(points[0]);
         line.SetPositions(positions.ToArray());
     }
 
