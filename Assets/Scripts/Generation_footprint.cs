@@ -135,7 +135,6 @@ public class Generation_footprint : MonoBehaviour
                     this.id++;
                     break;
             }
-            
         }
     }
 
