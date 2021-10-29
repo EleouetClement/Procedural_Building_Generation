@@ -10,8 +10,8 @@ public class Generation_footprint : MonoBehaviour
     [SerializeField][Range(1, 10)] private int floorsCount;
     [SerializeField] [Range(0, 2)] private int widthStep;
     [SerializeField] [Range(0, 2)] private int heightStep;
+    [SerializeField] [Range(0, 360)] private int turnRadius;
     [SerializeField] private string axiom;
-    [SerializeField] private const char F = 'F';
     [SerializeField] private GameObject pointPrefab;
     private List<Vector3> points;
     private Dictionary<char, string> rules;
@@ -69,7 +69,9 @@ public class Generation_footprint : MonoBehaviour
     {
         rules = new Dictionary<char, string>();
         //Initiate All the Rules According to the inputs
-        rules.Add(F, "F+F-F");
+        rules.Add('F', "F");
+        rules.Add('C', "F -f");
+        //rules.Add("-f", "")
     }
 
 
@@ -106,20 +108,26 @@ public class Generation_footprint : MonoBehaviour
     private void ApplyRules(char member)
     {
         //Apply the rules of a precise given member
+        //string [] currentRules = member.Split(' ');
         string currentRules = "";
         this.rules.TryGetValue(member, out currentRules);
+        string[] rules = currentRules.Split(' ');
         Debug.Log(member);
         Debug.Log(currentRules);
         
-        foreach (char rule in currentRules)
+        foreach (string rule in rules)
         {
             switch (rule)
             {
-                case '-':
+                case "-":
                     this.direction = TurnRight();
                     break;
-                case '+':
+                case "+":
                     this.direction = TurnLeft();
+                    break;
+                case "-f":
+                    //Go back to the previous location whithout adding a point
+                    this.position = MoveBackward();
                     break;
                 default:
                     this.position = MoveForward();
@@ -141,6 +149,13 @@ public class Generation_footprint : MonoBehaviour
         this.points.Add(this.position);
     }
 
+    private Vector3 MoveBackward()
+    {
+        //Move the current cursor then put a new point at the location
+        Vector3 newPosition = this.position - (widthStep * this.direction);
+        return newPosition;
+    }
+
     private Vector3 MoveForward()
     {
         //Move the current cursor then put a new point at the location
@@ -152,7 +167,7 @@ public class Generation_footprint : MonoBehaviour
     private Vector3 TurnLeft()
     {
         //Apply a negative rotation to the cursor 
-        Vector3 newDirection = Quaternion.Euler(0, 90, 0) * this.direction.normalized;
+        Vector3 newDirection = Quaternion.Euler(0, turnRadius, 0) * this.direction.normalized;
         Debug.Log(newDirection);
         return newDirection;
     }
@@ -160,7 +175,7 @@ public class Generation_footprint : MonoBehaviour
     private Vector3 TurnRight()
     {
         //Apply a positive rotation to the cursor
-        Vector3 newDirection = Quaternion.Euler(0, -90, 0) * this.direction.normalized;
+        Vector3 newDirection = Quaternion.Euler(0, -turnRadius, 0) * this.direction.normalized;
         Debug.Log(newDirection);
         return newDirection;
     }
