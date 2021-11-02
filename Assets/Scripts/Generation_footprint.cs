@@ -9,16 +9,17 @@ public class Generation_footprint : MonoBehaviour
     [SerializeField][Range(0, 10)] private int depth;
     [SerializeField][Range(1, 10)] private int floorsCount;
     [SerializeField] [Range(0, 2)] private int widthStep;
-    [SerializeField] [Range(0, 2)] private int heightStep;
+    [SerializeField] [Range(0, 2)] private float heightStep;
     [SerializeField] [Range(0, 360)] private int turnRadius;
     [SerializeField] private string axiom;
     [SerializeField] private GameObject pointPrefab;
+    [SerializeField] private GameObject wallPrefab;
     private List<Vector3> points;
     private Dictionary<char, string> rules;
     private Vector3 direction;
     private Vector3 position;
     private int id = 0;
-    private int size;
+    private int NbPointsPerFloor;
 
 
     void Start()
@@ -29,8 +30,9 @@ public class Generation_footprint : MonoBehaviour
         InitRules();
 
         GenerateFootPrint(startPosition, startDirection);
-        this.size = this.points.Count;
+        this.NbPointsPerFloor = this.points.Count;
         Build();
+        WallInsertion();
         //DrawFootPrint();
     }
 
@@ -38,6 +40,70 @@ public class Generation_footprint : MonoBehaviour
     void Update()
     {
         
+    }
+
+    private void InitRules()
+    {
+        rules = new Dictionary<char, string>();
+        //Initiate All the Rules According to the inputs
+        rules.Add('F', "F");
+        rules.Add('C', "F -f");
+        rules.Add('S', "F + F - F");
+        rules.Add('W', "F F F + F F - F F F F + F F F F + F");
+        //rules.Add("-f", "")
+    }
+
+    private void WallInsertion()
+    {
+        //Insert Wall between the points 
+        if(this.points == null)
+        {
+            Debug.LogError("WallInsertion : there is no construction points");
+            return;
+        }
+
+        if(this.wallPrefab == null)
+        {
+            Debug.LogError("WallInsertion : missing wall prefab");
+            return;
+        }
+        for(int i = 0; i < this.NbPointsPerFloor; i++)
+        {
+            //Getting the direction between 2 points
+            Vector3 wallDirection = Vector3.zero;
+            if (i == this.NbPointsPerFloor - 1)
+            {
+                wallDirection = this.points[0] - this.points[i];
+            }
+            else
+            {
+                wallDirection = this.points[i + 1] - this.points[i];
+            }
+            wallDirection = wallDirection.normalized;
+            GameObject go = Instantiate(wallPrefab, this.points[i], Quaternion.identity);
+
+            //Rotating the wall to make sur it is  perpendicular to the direction of both points
+            //Quaternion rot = Quaternion.Euler(0, 90, 0);
+            go.transform.rotation = Quaternion.LookRotation(wallDirection);
+            //go.transform.rotation *= rot;
+
+            //Moving the wall to put it at the mid distance of both points 
+            float distance = 0f;
+            if(i == this.NbPointsPerFloor - 1)
+            {
+                distance = Vector3.Distance(this.points[i], this.points[0]);
+            }
+            else
+            {
+                distance = Vector3.Distance(this.points[i], this.points[i + 1]);
+            }
+            Vector3 newPosition = this.points[i] + (wallDirection * (distance / 2));
+            newPosition.y = newPosition.y + (heightStep / 2);
+            go.transform.position = newPosition;
+        }
+
+
+
     }
 
     private void Build()
@@ -55,7 +121,7 @@ public class Generation_footprint : MonoBehaviour
     {
         //Add all the points needed for the floor
         
-        for(int i = 0; i < size; i++)
+        for(int i = 0; i < NbPointsPerFloor; i++)
         {
             Vector3 newPos = this.points[i] + (floorNumber * heightStep * Vector3.up);
             this.points.Add(newPos);
@@ -65,15 +131,7 @@ public class Generation_footprint : MonoBehaviour
         }
     }
 
-    private void InitRules()
-    {
-        rules = new Dictionary<char, string>();
-        //Initiate All the Rules According to the inputs
-        rules.Add('F', "F");
-        rules.Add('C', "F -f");
-        rules.Add('S', "F + F - F");
-        //rules.Add("-f", "")
-    }
+    
 
 
 
@@ -85,6 +143,7 @@ public class Generation_footprint : MonoBehaviour
 
         //Direction must be normalized
         this.direction = startDirection.normalized;
+        Debug.Log(this.axiom);
         string[] currentAxiom = this.axiom.Split(' ');
         
         foreach(char member in this.axiom)
@@ -111,7 +170,11 @@ public class Generation_footprint : MonoBehaviour
         //Apply the rules of a precise given member
         //string [] currentRules = member.Split(' ');
         string currentRules = "";
-        this.rules.TryGetValue(member, out currentRules);
+        if(!this.rules.TryGetValue(member, out currentRules))
+        {
+            Debug.LogError("Règle inexistante : " + member);
+            return;
+        }
         string[] rules;
         if(currentRules.Length > 1)
         {
@@ -119,7 +182,7 @@ public class Generation_footprint : MonoBehaviour
         }
         else
         {
-            rules = { currentRules[0].ToString() };
+            rules = new string [] { currentRules[0].ToString() };
         }
         Debug.Log(member);
         Debug.Log(currentRules);
