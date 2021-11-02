@@ -68,7 +68,7 @@ public class Generation_footprint : MonoBehaviour
             Debug.LogError("WallInsertion : missing wall prefab");
             return;
         }
-        for(int floor = 1; floor <= this.floorsCount; floor++)
+        for(int floor = 0; floor < this.floorsCount; floor++)
         {
             BuildCurrentFloor(floor);
         }
@@ -80,21 +80,25 @@ public class Generation_footprint : MonoBehaviour
 
     private void BuildCurrentFloor(int floorId)
     {
-
-        for (int i = (this.NbPointsPerFloor * floorId); i < this.NbPointsPerFloor; i++)
+        int index = 0;
+        if(floorId == 0)
+        {
+            index = this.NbPointsPerFloor * 1;
+        }
+        for (int i = 0; i < this.NbPointsPerFloor; i++)
         {
             //Getting the direction between 2 points
             Vector3 wallDirection = Vector3.zero;
             if (i == this.NbPointsPerFloor - 1)
             {
-                wallDirection = this.points[0] - this.points[i];
+                wallDirection = this.points[index - (this.NbPointsPerFloor-1)] - this.points[index];
             }
             else
             {
-                wallDirection = this.points[i + 1] - this.points[i];
+                wallDirection = this.points[index + 1] - this.points[index];
             }
             wallDirection = wallDirection.normalized;
-            GameObject go = Instantiate(wallPrefab, this.points[i], Quaternion.identity);
+            GameObject go = Instantiate(wallPrefab, this.points[index], Quaternion.identity);
 
             //Rotating the wall to make sur it is  perpendicular to the direction of both points
             //Quaternion rot = Quaternion.Euler(0, 90, 0);
@@ -105,15 +109,16 @@ public class Generation_footprint : MonoBehaviour
             float distance = 0f;
             if (i == this.NbPointsPerFloor - 1)
             {
-                distance = Vector3.Distance(this.points[i], this.points[0]);
+                distance = Vector3.Distance(this.points[index], this.points[index - (this.NbPointsPerFloor - 1)]);
             }
             else
             {
-                distance = Vector3.Distance(this.points[i], this.points[i + 1]);
+                distance = Vector3.Distance(this.points[index], this.points[index + 1]);
             }
-            Vector3 newPosition = this.points[i] + (wallDirection * (distance / 2));
+            Vector3 newPosition = this.points[index] + (wallDirection * (distance / 2));
             newPosition.y = newPosition.y + (floorId * (heightStep / 2));
             go.transform.position = newPosition;
+            index++;
         }
     }
 
