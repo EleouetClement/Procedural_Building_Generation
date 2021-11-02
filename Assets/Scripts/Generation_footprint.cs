@@ -1,6 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class Generation_footprint : MonoBehaviour
 {
@@ -11,10 +11,8 @@ public class Generation_footprint : MonoBehaviour
     [SerializeField] [Range(0, 2)] private int step;
 
 
-
     void Start()
     {
-        
     }
 
     // Update is called once per frame
