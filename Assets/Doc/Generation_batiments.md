@@ -22,11 +22,16 @@
 
 
 ### Etapes
-1 -> Generation de la footprint
-2 -> Remplissage de la footprint peu importe les murs utilisés
+1 -> Generation de la footprint (Avec retour au point de Départ et angle de 90 degrés)
+2 -> Generation de footprint avec polyligne (Pas de retour au point de depart géré par le L-system)
 3 -> Etablir des règles de remplissage
 4 -> Generer un batiment entier
 5 -> Generer plusieurs types de batiments
 6 -> ...
+
+
+
+### Decoupage des taches
+
 
 
