@@ -347,6 +347,6 @@ MonoBehaviour:
   floorsCount: 8
   widthStep: 1
   heightStep: 1
-  turnRadius: 72
-  axiom: C+C+C+C+C
+  turnRadius: 40
+  axiom: S + S + S
   pointPrefab: {fileID: 8849277698866286912, guid: 8ecb9981ab3f9054c8cf1c900d72bc94, type: 3}

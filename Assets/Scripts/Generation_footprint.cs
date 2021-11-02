@@ -71,6 +71,7 @@ public class Generation_footprint : MonoBehaviour
         //Initiate All the Rules According to the inputs
         rules.Add('F', "F");
         rules.Add('C', "F -f");
+        rules.Add('S', "F + F - F");
         //rules.Add("-f", "")
     }
 
@@ -111,7 +112,15 @@ public class Generation_footprint : MonoBehaviour
         //string [] currentRules = member.Split(' ');
         string currentRules = "";
         this.rules.TryGetValue(member, out currentRules);
-        string[] rules = currentRules.Split(' ');
+        string[] rules;
+        if(currentRules.Length > 1)
+        {
+            rules = currentRules.Split(' ');
+        }
+        else
+        {
+            rules = { currentRules[0].ToString() };
+        }
         Debug.Log(member);
         Debug.Log(currentRules);
         
