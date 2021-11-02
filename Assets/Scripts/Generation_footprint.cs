@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class Generation_footprint : MonoBehaviour
 {
@@ -67,7 +68,20 @@ public class Generation_footprint : MonoBehaviour
             Debug.LogError("WallInsertion : missing wall prefab");
             return;
         }
-        for(int i = 0; i < this.NbPointsPerFloor; i++)
+        for(int floor = 1; floor <= this.floorsCount; floor++)
+        {
+            BuildCurrentFloor(floor);
+        }
+        
+
+
+
+    }
+
+    private void BuildCurrentFloor(int floorId)
+    {
+
+        for (int i = (this.NbPointsPerFloor * floorId); i < this.NbPointsPerFloor; i++)
         {
             //Getting the direction between 2 points
             Vector3 wallDirection = Vector3.zero;
@@ -89,7 +103,7 @@ public class Generation_footprint : MonoBehaviour
 
             //Moving the wall to put it at the mid distance of both points 
             float distance = 0f;
-            if(i == this.NbPointsPerFloor - 1)
+            if (i == this.NbPointsPerFloor - 1)
             {
                 distance = Vector3.Distance(this.points[i], this.points[0]);
             }
@@ -98,12 +112,9 @@ public class Generation_footprint : MonoBehaviour
                 distance = Vector3.Distance(this.points[i], this.points[i + 1]);
             }
             Vector3 newPosition = this.points[i] + (wallDirection * (distance / 2));
-            newPosition.y = newPosition.y + (heightStep / 2);
+            newPosition.y = newPosition.y + (floorId * (heightStep / 2));
             go.transform.position = newPosition;
         }
-
-
-
     }
 
     private void Build()

@@ -171,8 +171,8 @@ MonoBehaviour:
   floorsCount: 1
   widthStep: 1
   heightStep: 1
-  turnRadius: 90
-  axiom: S+S+S+S
+  turnRadius: 36
+  axiom: C+C+C+C+C+C+C+C+C+C
   pointPrefab: {fileID: 8849277698866286912, guid: 8ecb9981ab3f9054c8cf1c900d72bc94, type: 3}
   wallPrefab: {fileID: 3117730301958794434, guid: c084a94c8dab2764d80eb55fec86a33b, type: 3}
 --- !u!1 &705507993
