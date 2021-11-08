@@ -72,18 +72,14 @@ public class Generation_footprint : MonoBehaviour
         {
             BuildCurrentFloor(floor);
         }
-        
-
-
-
     }
 
     private void BuildCurrentFloor(int floorId)
     {
         int index = 0;
-        if(floorId == 0)
+        if(floorId > 0)
         {
-            index = this.NbPointsPerFloor * 1;
+            index = this.NbPointsPerFloor * floorId;
         }
         for (int i = 0; i < this.NbPointsPerFloor; i++)
         {
@@ -91,33 +87,15 @@ public class Generation_footprint : MonoBehaviour
             Vector3 wallDirection = Vector3.zero;
             if (i == this.NbPointsPerFloor - 1)
             {
-                wallDirection = this.points[index - (this.NbPointsPerFloor-1)] - this.points[index];
+                wallDirection = this.points[index - i] - this.points[index];
             }
             else
             {
                 wallDirection = this.points[index + 1] - this.points[index];
             }
             wallDirection = wallDirection.normalized;
-            GameObject go = Instantiate(wallPrefab, this.points[index], Quaternion.identity);
-
-            //Rotating the wall to make sur it is  perpendicular to the direction of both points
-            //Quaternion rot = Quaternion.Euler(0, 90, 0);
-            go.transform.rotation = Quaternion.LookRotation(wallDirection);
-            //go.transform.rotation *= rot;
-
-            //Moving the wall to put it at the mid distance of both points 
-            float distance = 0f;
-            if (i == this.NbPointsPerFloor - 1)
-            {
-                distance = Vector3.Distance(this.points[index], this.points[index - (this.NbPointsPerFloor - 1)]);
-            }
-            else
-            {
-                distance = Vector3.Distance(this.points[index], this.points[index + 1]);
-            }
-            Vector3 newPosition = this.points[index] + (wallDirection * (distance / 2));
-            newPosition.y = newPosition.y + (floorId * (heightStep / 2));
-            go.transform.position = newPosition;
+            var offset = new Vector3(wallDirection.x * widthStep, heightStep, wallDirection.z * widthStep) / 2;
+            GameObject go = Instantiate(wallPrefab, this.points[index]+ offset, Quaternion.LookRotation(wallDirection));
             index++;
         }
     }
@@ -142,15 +120,10 @@ public class Generation_footprint : MonoBehaviour
             Vector3 newPos = this.points[i] + (floorNumber * heightStep * Vector3.up);
             this.points.Add(newPos);
             GameObject go = Instantiate(pointPrefab, newPos, Quaternion.identity);
-            go.name = "" + id;
+            go.name = id.ToString();
             id++;
         }
     }
-
-    
-
-
-
 
     private void GenerateFootPrint(Vector3 startPosition, Vector3 startDirection)
     {
@@ -167,10 +140,10 @@ public class Generation_footprint : MonoBehaviour
             switch(member)
             {
                 case '-':
-                    this.direction = TurnRight();
+                    this.direction = Tools.TurnRight(direction, turnRadius);
                     break;
                 case '+':
-                    this.direction = TurnLeft();
+                    this.direction = Tools.TurnLeft(direction, turnRadius);
                     break;
                 default:
                     //Apply the rules of the current member
@@ -198,7 +171,7 @@ public class Generation_footprint : MonoBehaviour
         }
         else
         {
-            rules = new string [] { currentRules[0].ToString() };
+            rules = new string[]{ currentRules[0].ToString() };
         }
         Debug.Log(member);
         Debug.Log(currentRules);
@@ -208,10 +181,10 @@ public class Generation_footprint : MonoBehaviour
             switch (rule)
             {
                 case "-":
-                    this.direction = TurnRight();
+                    this.direction = Tools.TurnRight(direction, turnRadius);
                     break;
                 case "+":
-                    this.direction = TurnLeft();
+                    this.direction = Tools.TurnLeft(direction, turnRadius);
                     break;
                 case "-f":
                     //Go back to the previous location whithout adding a point
@@ -249,24 +222,7 @@ public class Generation_footprint : MonoBehaviour
         Vector3 newPosition = this.position + (widthStep * this.direction);
         return newPosition;
     }
-
-
-    private Vector3 TurnLeft()
-    {
-        //Apply a negative rotation to the cursor 
-        Vector3 newDirection = Quaternion.Euler(0, turnRadius, 0) * this.direction.normalized;
-        Debug.Log(newDirection);
-        return newDirection;
-    }
-
-    private Vector3 TurnRight()
-    {
-        //Apply a positive rotation to the cursor
-        Vector3 newDirection = Quaternion.Euler(0, -turnRadius, 0) * this.direction.normalized;
-        Debug.Log(newDirection);
-        return newDirection;
-    }
-
+    
     private void DrawFootPrint()
     {
         //To check is the points are ok

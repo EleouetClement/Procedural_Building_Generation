@@ -174,7 +174,7 @@ MonoBehaviour:
   turnRadius: 90
   axiom: S+S+S+S
   pointPrefab: {fileID: 8849277698866286912, guid: 8ecb9981ab3f9054c8cf1c900d72bc94, type: 3}
-  wallPrefab: {fileID: 3117730301958794434, guid: c084a94c8dab2764d80eb55fec86a33b, type: 3}
+  wallPrefab: {fileID: 5605769545234765343, guid: c0fefc4756a8a8a4b978d0fd3dbf28ab, type: 3}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
