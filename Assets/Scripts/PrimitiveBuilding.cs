@@ -10,6 +10,7 @@ public class PrimitiveBuilding : MonoBehaviour
     int nbSides;
     float r;
     float h;
+    public Vector2[] uvs;
     Vector3 center;
     public Texture tex;
     private bool roof = false;
@@ -23,15 +24,20 @@ public class PrimitiveBuilding : MonoBehaviour
 
     public void BuildPrimitive()
     {
-        vertices = new Vector3[nbSides * 2 + 2];
+        int nbVertex = nbSides * 2 + 2;
+        vertices = new Vector3[nbVertex];
+        uvs = new Vector2[nbVertex];
         var pi = Mathf.PI;
         float teta;
+        float uvXCoord = 1f / (nbSides - 1);
 
         for (int i = 0; i < nbSides * 2; i = i + 2)
         {
             teta = pi * i / nbSides;
             vertices[i] = center + new Vector3(r * Mathf.Cos(teta), h, r * Mathf.Sin(teta));
             vertices[i + 1] = center + new Vector3(r * Mathf.Cos(teta), 0, r * Mathf.Sin(teta));
+            uvs[i] = new Vector2(i * uvXCoord, 0);
+            uvs[i + 1] = new Vector2(i * uvXCoord, 1);
         }
         vertices[nbSides * 2] = center + new Vector3(0, h, 0);
         vertices[nbSides * 2 + 1] = center;
@@ -92,7 +98,7 @@ public class PrimitiveBuilding : MonoBehaviour
         
         gameObject.GetComponent<MeshFilter>().mesh = msh;
         gameObject.GetComponent<Renderer>().material = mat;
-        gameObject.GetComponent<Renderer>().material.mainTexture = tex;
+        msh.uv = uvs;
         msh.RecalculateNormals();
     }
 

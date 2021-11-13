@@ -45,9 +45,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f80152bec097f5b47b9d23b59aab146f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mat: {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  mat: {fileID: 2100000, guid: 541660774e57d1f4cb1b9ebeb0c774e6, type: 2}
   vertices: []
   triangles: 
+  uvs: []
   tex: {fileID: 2800000, guid: d5388b2582bdd0343a24db012eadbd12, type: 3}
 --- !u!33 &2282377614757047281
 MeshFilter:
