@@ -30,7 +30,9 @@ public class PrimitiveBuilding : MonoBehaviour
         {
             teta = pi * i / nbSides;
             vertices[i] = center + new Vector3(r * Mathf.Cos(teta), h, r * Mathf.Sin(teta));
+            Debug.Log("Vertice[i] = " + vertices[i]);
             vertices[i + 1] = center + new Vector3(r * Mathf.Cos(teta), 0, r * Mathf.Sin(teta));
+            Debug.Log("Vertice[i + 1] = " + vertices[i + 1]);
         }
         vertices[nbSides * 2] = center + new Vector3(0, h, 0);
         vertices[nbSides * 2 + 1] = center;
@@ -94,4 +96,14 @@ public class PrimitiveBuilding : MonoBehaviour
         gameObject.GetComponent<Renderer>().material.mainTexture = tex;
         msh.RecalculateNormals();
     }
+
+    /*private void OnDrawGizmos()
+    {
+        //Permet de visualiser les sommets
+        for (int i = 0; i < vertices.Length; i++)
+        {
+            Gizmos.DrawSphere(vertices[i], 0.1f);
+            //Handles.Label(vertices[i] - Vector3.up * .01f, i.ToString());
+        }
+    }*/
 }
