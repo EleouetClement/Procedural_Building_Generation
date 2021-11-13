@@ -42,21 +42,21 @@ public class PrimitiveBuilding : MonoBehaviour
         {
             if (x == nbSides - 1)
             {
-                triangles[ti] = vi;
+                triangles[ti] = 0;
                 triangles[ti + 1] = vi + 1;
-                triangles[ti + 2] = 0;
+                triangles[ti + 2] = vi;
                 triangles[ti + 3] = 0;
-                triangles[ti + 4] = vi + 1;
-                triangles[ti + 5] = 1;
+                triangles[ti + 4] = 1;
+                triangles[ti + 5] = vi+1;
             }
             else
             {
-                triangles[ti] = vi;
-                triangles[ti + 1] = vi + 1;
+                triangles[ti] = vi + 1;
+                triangles[ti + 1] = vi;
                 triangles[ti + 2] = vi + 2;
-                triangles[ti + 3] = vi + 2;
+                triangles[ti + 3] = vi + 3;
                 triangles[ti + 4] = vi + 1;
-                triangles[ti + 5] = vi + 3;
+                triangles[ti + 5] = vi + 2;
             }
             ti += 6;
         }
@@ -65,21 +65,21 @@ public class PrimitiveBuilding : MonoBehaviour
         {
             if (x == nbSides - 1)
             {
-                triangles[ti] = vi;
+                triangles[ti] = nbSides * 2;
                 triangles[ti + 1] = 0;
-                triangles[ti + 2] = nbSides * 2;
-                triangles[ti + 3] = 1;
+                triangles[ti + 2] = vi;
+                triangles[ti + 3] = nbSides * 2 + 1;
                 triangles[ti + 4] = vi + 1;
-                triangles[ti + 5] = nbSides * 2 + 1;
+                triangles[ti + 5] = 1;
             }
             else
             {
-                triangles[ti] = vi;
+                triangles[ti] = nbSides * 2;
                 triangles[ti + 1] = vi + 2;
-                triangles[ti + 2] = nbSides * 2;
-                triangles[ti + 3] = vi + 3;
+                triangles[ti + 2] = vi;
+                triangles[ti + 3] = nbSides * 2 + 1;
                 triangles[ti + 4] = vi + 1;
-                triangles[ti + 5] = nbSides * 2 + 1;
+                triangles[ti + 5] = vi+3;
 
             }
 
@@ -138,7 +138,7 @@ public class PrimitiveBuilding : MonoBehaviour
 
     }
 
-    private void OnDrawGizmos()
+    /*private void OnDrawGizmos()
     {
         //Permet de visualiser les sommets
         for (int i = 0; i < vertices.Length; i++)
@@ -155,5 +155,5 @@ public class PrimitiveBuilding : MonoBehaviour
             Gizmos.DrawSphere(vertices[i], 0.1f);
             //Handles.Label(vertices[i] - Vector3.up * .01f, i.ToString());
         }
-    }
+    }*/
 }

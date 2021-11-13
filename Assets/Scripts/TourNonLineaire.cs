@@ -52,9 +52,13 @@ public class TourNonLineaire : MonoBehaviour
                     break;
                 case 'C':
                     //Build a cubical floor
-                    Debug.Log("Etage cubique");
                     currentFloorSides = BuildFloor(4, false);
                     currentFloorSides = 4;
+                    break;
+                case 'S':
+                    //Build Sphere building
+                    currentFloorSides = BuildFloor(10, false);
+                    currentFloorSides = 10;
                     break;
                 case 'R':
                     //Build the roof
