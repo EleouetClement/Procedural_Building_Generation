@@ -31,7 +31,10 @@
 
 
 
-### Decoupage des taches
+### En cours
+
+Clement -> Je suis en train d'implémenter les batiments avec étages de taille différentes
+
 
 
 
