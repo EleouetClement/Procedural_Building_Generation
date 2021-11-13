@@ -11,6 +11,7 @@ public class TourNonLineaire : MonoBehaviour
     [SerializeField] string footprintAxiom;
     [SerializeField] [Range(1, 10)] float floorWidth = 1f;
     [SerializeField] [Range(1, 10)] float floorHeight = 1f;
+    [SerializeField] [Range(1, 10)] float roofHeight = 1f;
     [SerializeField] [Range(3, 15)] private int polygoneMinSides;
     [SerializeField] [Range(3, 15)] private int polygoneMaxSides;
     public GameObject buildingPrefab;
@@ -29,6 +30,7 @@ public class TourNonLineaire : MonoBehaviour
 
     private void ApplyRules()
     {
+        int currentFloorSides = 0;
         //Read the axiom and build the building according to the rules given
         foreach(char member in floorsAxiom)
         {
@@ -46,12 +48,17 @@ public class TourNonLineaire : MonoBehaviour
 
                 case 'P':
                     //Build a floor
-                    BuildFloor(null);
+                    currentFloorSides = BuildFloor(null, false);
                     break;
                 case 'C':
                     //Build a cubical floor
                     Debug.Log("Etage cubique");
-                    BuildFloor(4);
+                    currentFloorSides = BuildFloor(4, false);
+                    currentFloorSides = 4;
+                    break;
+                case 'R':
+                    //Build the roof
+                    BuildFloor(currentFloorSides, true);
                     break;
 
 
@@ -59,25 +66,46 @@ public class TourNonLineaire : MonoBehaviour
         }
     }
 
-    private void BuildFloor(int? nbSides)
+
+    private int BuildFloor(int? nbSides, bool isRoof)
     {
-        //Use the PrimitiveBuilding script to 
+        //Use the PrimitiveBuilding script to build one of the floors
         Vector3 currentCenter = center + new Vector3(0, floorHeight * currentFloor, 0);
-        Debug.Log("centre : " + currentCenter);
         PrimitiveBuilding pb = GameObject.Instantiate(buildingPrefab, center, Quaternion.identity).GetComponent<PrimitiveBuilding>();
-        if (nbSides == null)
+        int sides = 0;
+        if(!isRoof)
         {
-            pb.Initialize(UnityEngine.Random.Range(polygoneMinSides, polygoneMaxSides),
-                floorWidth,
-                floorHeight,
-                currentCenter);
+            if (nbSides == null)
+            {
+                sides = UnityEngine.Random.Range(polygoneMinSides, polygoneMaxSides);
+                pb.Initialize(sides,
+                    floorWidth,
+                    floorHeight,
+                    currentCenter);
+            }
+            else
+            {
+                sides = (int)nbSides;
+                pb.Initialize(nbSides, floorWidth, floorHeight, currentCenter);
+            }
+            currentFloor++;
+            pb.BuildPrimitive();
         }
         else
         {
-            pb.Initialize(nbSides, floorWidth, floorHeight, currentCenter);
+            if (nbSides == null)
+            {
+                Debug.LogError("BuilfFloor : error number of sides is needed for the roof");
+                return -1;
+            }
+            else
+            {
+                pb.Initialize(nbSides, floorWidth, roofHeight, currentCenter);
+            }
+            currentFloor++;
+            pb.BuildRoof();
         }
-        currentFloor++;
-        pb.BuildPrimitive();
+        return sides;
 
     }
 }
