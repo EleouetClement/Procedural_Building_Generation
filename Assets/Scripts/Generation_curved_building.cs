@@ -14,14 +14,14 @@ public class Generation_curved_building : MonoBehaviour
     private Vector3[] controlCoor;
     Vector3[] vertices;
     int[] triangles;
-
+    Vector2[] UVs;
     // Start is called before the first frame update
     void Start()
     {
         CreateVertices();
+        CreateUVs();
         CreateTriangles();
         Build();
-
     }
 
     
@@ -106,15 +106,26 @@ public class Generation_curved_building : MonoBehaviour
             vertices[heightWidth] = vertices[orig] + topRightCorner;
         }
 
-        for (int i = 0; i < vertices.Length; i++)
+        //for (int i = 0; i < vertices.Length; i++)
+        //{
+        //    GameObject go = Instantiate(testPrefab, vertices[i], Quaternion.identity);
+        //    go.GetComponent<MeshRenderer>().material.color = Color.cyan;
+        //    go.name = i.ToString();
+        //}
+    }
+    private void CreateUVs()
+    {
+        int origWidth = controlCoor.Length, origHeight = controlCoor.Length * 2, heightWidth = controlCoor.Length * 3;
+        UVs = new Vector2[controlCoor.Length * 4];
+        var uvXCoord = 1 / (controlCoor.Length * 2) - 1;
+        for(int i = 0; i < controlCoor.Length; i ++, origWidth++, origHeight++, heightWidth++)
         {
-            GameObject go = Instantiate(testPrefab, vertices[i], Quaternion.identity);
-            go.GetComponent<MeshRenderer>().material.color = Color.cyan;
-            go.name = i.ToString();
+            UVs[origHeight] = new Vector2(i * uvXCoord, 0);
+            UVs[i] = new Vector2(i * uvXCoord, 1);
+            UVs[heightWidth] = new Vector2(1-(i * uvXCoord), 0);
+            UVs[origWidth] = new Vector2(1 - (i * uvXCoord), 1);
         }
     }
-
-
     //Use the vertices tab to create the triangles
     private void CreateTriangles()
     {
@@ -167,7 +178,6 @@ public class Generation_curved_building : MonoBehaviour
             triangles[ti + 23] = i + nbCarresPerSide + 1;
             int tmps = ti + 23;
             Debug.Log("ti = " + tmps);
-
         }
         //Set up the front and back boundries
         Debug.Log("ti = " + ti + " triangle[ti-1] "+triangles[ti-1] + " triangle[ti+1] " + triangles[ti+1]);
@@ -178,29 +188,21 @@ public class Generation_curved_building : MonoBehaviour
         triangles[ti + 3] = nbCarresPerSide * 2;
         triangles[ti + 4] = nbCarresPerSide;
         triangles[ti + 5] = nbCarresPerSide * 3;
-        
-
-
+  
         triangles[ti + 6] = (nbCarresPerSide-1);
         triangles[ti + 7] = (nbCarresPerSide * 2) + (nbCarresPerSide - 1);
         triangles[ti + 8] = nbCarresPerSide + (nbCarresPerSide - 1);
         triangles[ti + 9] = nbCarresPerSide + (nbCarresPerSide - 1);
         triangles[ti + 10] = (nbCarresPerSide * 2) + (nbCarresPerSide - 1);
         triangles[ti + 11] = (nbCarresPerSide * 3) + (nbCarresPerSide - 1);
-
-
     }
-
-
-
-
-
-
+    
     private void Build()
     {
         Mesh msh = new Mesh();
         msh.vertices = vertices;
         msh.triangles = triangles;
+        msh.uv = UVs;
         msh.RecalculateNormals();
         MeshFilter mr = gameObject.AddComponent<MeshFilter>();
         gameObject.AddComponent<MeshRenderer>();
