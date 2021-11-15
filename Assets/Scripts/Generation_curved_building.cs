@@ -10,6 +10,7 @@ public class Generation_curved_building : MonoBehaviour
     [SerializeField] GameObject[] controlPoints;
     [SerializeField] GameObject testPrefab;
     [SerializeField] Material meshMat;
+    [SerializeField] public Texture tex;
 
     private Vector3[] controlCoor;
     Vector3[] vertices;
