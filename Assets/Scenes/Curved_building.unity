@@ -207,7 +207,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8849277698866286916, guid: 8ecb9981ab3f9054c8cf1c900d72bc94, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 9.91
+      value: 14.14
       objectReference: {fileID: 0}
     - target: {fileID: 8849277698866286916, guid: 8ecb9981ab3f9054c8cf1c900d72bc94, type: 3}
       propertyPath: m_LocalPosition.y
@@ -383,8 +383,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74a1cc2cdae1baf439c292368d281997, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 4.1
-  height: 12.1
+  width: 7.8
+  height: 5
   numberOfIterations: 3
   controlPoints:
   - {fileID: 387313520}
@@ -392,6 +392,7 @@ MonoBehaviour:
   - {fileID: 1091774831}
   - {fileID: 1877295399}
   testPrefab: {fileID: 8849277698866286912, guid: 8ecb9981ab3f9054c8cf1c900d72bc94, type: 3}
+  meshMat: {fileID: 2100000, guid: e891f5660043d5e4e85f07efcdb19991, type: 2}
 --- !u!1001 &1091774829
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -409,11 +410,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8849277698866286916, guid: 8ecb9981ab3f9054c8cf1c900d72bc94, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.4884224
+      value: -0.45
       objectReference: {fileID: 0}
     - target: {fileID: 8849277698866286916, guid: 8ecb9981ab3f9054c8cf1c900d72bc94, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.37564874
+      value: -0.87
       objectReference: {fileID: 0}
     - target: {fileID: 8849277698866286916, guid: 8ecb9981ab3f9054c8cf1c900d72bc94, type: 3}
       propertyPath: m_LocalPosition.z

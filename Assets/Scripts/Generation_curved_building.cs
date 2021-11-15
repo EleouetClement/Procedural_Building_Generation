@@ -9,7 +9,7 @@ public class Generation_curved_building : MonoBehaviour
     [SerializeField] float numberOfIterations = 1;
     [SerializeField] GameObject[] controlPoints;
     [SerializeField] GameObject testPrefab;
-
+    [SerializeField] Material meshMat;
 
     private Vector3[] controlCoor;
     Vector3[] vertices;
@@ -18,7 +18,10 @@ public class Generation_curved_building : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        BuildCurvedBuilding();
+        CreateVertices();
+        CreateTriangles();
+        Build();
+
     }
 
     
@@ -69,16 +72,10 @@ public class Generation_curved_building : MonoBehaviour
         }
         //newLine.Add(points[points.Count - 1]);
 
-        //for (int i = 0; i < controlCoor.Length; i++)
-        //{
-        //    GameObject go = Instantiate(testPrefab, controlCoor[i], Quaternion.identity);
-        //    go.GetComponent<MeshRenderer>().material.color = Color.cyan;
-        //}
-
     }
 
     //Use the the list of points created by CreateCurve() to add the new point.
-    private void BuildCurvedBuilding()
+    private void CreateVertices()
     {
         //Create the initial curve
         CreateCurve();
@@ -113,12 +110,13 @@ public class Generation_curved_building : MonoBehaviour
         {
             GameObject go = Instantiate(testPrefab, vertices[i], Quaternion.identity);
             go.GetComponent<MeshRenderer>().material.color = Color.cyan;
+            go.name = i.ToString();
         }
     }
 
 
     //Use the vertices tab to create the triangles
-    private void CreatingTriangles()
+    private void CreateTriangles()
     {
         if(vertices == null)
         {
@@ -126,6 +124,88 @@ public class Generation_curved_building : MonoBehaviour
             return;
         }
 
+        //Initiating triangles tab
+        int nbCarresPerSide = (vertices.Length / 4);
+        int nbTriangles = nbCarresPerSide -1;
+        nbTriangles = ((nbTriangles * 2) * 4) + 4;
+        triangles = new int[nbTriangles * 3];
+
+        int ti = 0;
+        //Each iteration we make all 4 sides of a part of the building
+        for (int i = 0; i < nbCarresPerSide - 1; i++, ti+=24)
+        {
+            //Right side
+            triangles[ti] = i;
+            triangles[ti+1] = i + nbCarresPerSide * 2;
+            triangles[ti+2] = i + 1;
+            triangles[ti+3] = i + (nbCarresPerSide * 2);
+            triangles[ti+4] = i + (nbCarresPerSide * 2) + 1;
+            triangles[ti + 5] = i + 1;
+
+            //Top side
+            triangles[ti + 6] = i + nbCarresPerSide * 2;
+            triangles[ti + 7] = i + nbCarresPerSide * 3;
+            triangles[ti + 8] = i + (nbCarresPerSide * 2) + 1;
+            triangles[ti + 9] = i + nbCarresPerSide * 3;
+            triangles[ti + 10] = i + (nbCarresPerSide * 3) + 1;
+            triangles[ti + 11] = i + (nbCarresPerSide * 2) + 1;
+
+            //Left side
+            triangles[ti + 12] = i + nbCarresPerSide * 3;
+            triangles[ti + 13] = i + nbCarresPerSide;
+            triangles[ti + 14] = i + (nbCarresPerSide * 3) + 1;
+            triangles[ti + 15] = i + nbCarresPerSide;
+            triangles[ti + 16] = i + nbCarresPerSide + 1;
+            triangles[ti + 17] = i + (nbCarresPerSide * 3) + 1;
+
+            //Bot side
+            triangles[ti + 18] = i + nbCarresPerSide;
+            triangles[ti + 19] = i;
+            triangles[ti + 20] = i + nbCarresPerSide + 1;
+            triangles[ti + 21] = i;
+            triangles[ti + 22] = i + 1;
+            triangles[ti + 23] = i + nbCarresPerSide + 1;
+            int tmps = ti + 23;
+            Debug.Log("ti = " + tmps);
+
+        }
+        //Set up the front and back boundries
+        Debug.Log("ti = " + ti + " triangle[ti-1] "+triangles[ti-1] + " triangle[ti+1] " + triangles[ti+1]);
+        Debug.Log("triangles  = " + triangles.Length);
+        triangles[ti] = nbCarresPerSide * 2;
+        triangles[ti + 1] = 0;
+        triangles[ti + 2] = nbCarresPerSide;
+        triangles[ti + 3] = nbCarresPerSide * 2;
+        triangles[ti + 4] = nbCarresPerSide;
+        triangles[ti + 5] = nbCarresPerSide * 3;
+        
+
+
+        triangles[ti + 6] = (nbCarresPerSide-1);
+        triangles[ti + 7] = (nbCarresPerSide * 2) + (nbCarresPerSide - 1);
+        triangles[ti + 8] = nbCarresPerSide + (nbCarresPerSide - 1);
+        triangles[ti + 9] = nbCarresPerSide + (nbCarresPerSide - 1);
+        triangles[ti + 10] = (nbCarresPerSide * 2) + (nbCarresPerSide - 1);
+        triangles[ti + 11] = (nbCarresPerSide * 3) + (nbCarresPerSide - 1);
+
+
+    }
+
+
+
+
+
+
+    private void Build()
+    {
+        Mesh msh = new Mesh();
+        msh.vertices = vertices;
+        msh.triangles = triangles;
+        msh.RecalculateNormals();
+        MeshFilter mr = gameObject.AddComponent<MeshFilter>();
+        gameObject.AddComponent<MeshRenderer>();
+        gameObject.GetComponent<Renderer>().material = meshMat;
+        mr.mesh = msh;
     }
 
 }
