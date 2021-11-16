@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 
 namespace Primitive
 {
@@ -15,6 +15,7 @@ namespace Primitive
         [SerializeField] [Range(3, 15)] private int polygoneMinSides;
         [SerializeField] [Range(3, 15)] private int polygoneMaxSides;
         [SerializeField] [Range(0, 360)] private int turnRadius;
+        [SerializeField] [Range(0, 20)] private int nbIterations;
         public GameObject buildingPrefab;
 
         private Vector3 direction;
@@ -24,7 +25,13 @@ namespace Primitive
             StartingCenter = Vector3.zero;
             currentCenter = Vector3.zero;
             direction = Vector3.right.normalized;
-            ApplyRule();
+            for (int j = 0; j < nbIterations; j++)
+            {
+                for (int i = 0; i < 10; i++)
+                { ApplyRule(); }
+                currentCenter = StartingCenter - currentCenter;
+                turnRadius -= 2;
+            }
         }
         void ApplyRule()
         {
@@ -35,11 +42,11 @@ namespace Primitive
                 {
                     case '-':
                         this.direction = Tools.TurnRight(direction, turnRadius);
-                        this.currentCenter = this.currentCenter + this.direction * (width - Random.Range(2, width/2));
+                        this.currentCenter = this.currentCenter + this.direction * 10;
                         break;
                     case '+':
                         this.direction = Tools.TurnLeft(direction, turnRadius);
-                        this.currentCenter = this.currentCenter + this.direction * (width - Random.Range(2, width / 2));
+                        this.currentCenter = this.currentCenter + this.direction * 10;
                         break;
                     // P stands for Cylindre/polygone
                     case 'P':
@@ -62,6 +69,13 @@ namespace Primitive
             else
                 pb.Initialize(nbSides, width, length, currentCenter);
             pb.BuildPrimitive();
+        }
+        void Update()
+        {
+            if (Input.GetKey(KeyCode.R))
+            {
+                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
         }
     }
 }
