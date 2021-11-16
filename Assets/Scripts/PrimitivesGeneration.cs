@@ -10,11 +10,18 @@ namespace Primitive
         private Vector3 StartingCenter;
         [SerializeField] private string axiom;
         public Material buildingMaterial;
-        [SerializeField] [Range(1, 20)] private float length;
+        //Range of buildings' length
+        [SerializeField] [Range(1, 100)] private float length;
+        //Range of buildings' width
         [SerializeField] [Range(1, 10)] private float width;
         [SerializeField] [Range(3, 15)] private int polygoneMinSides;
         [SerializeField] [Range(3, 15)] private int polygoneMaxSides;
-        [SerializeField] [Range(0, 360)] private int turnRadius;
+        //Range of angle's value separation two buildings at each step 
+        [SerializeField] [Range(0, 360)] private int turnAngle;
+        [SerializeField] private int buildingsDistance;
+
+        //
+        [SerializeField] [Range(0, 20)] private int nbIncrement;
         [SerializeField] [Range(0, 20)] private int nbIterations;
         public GameObject buildingPrefab;
 
@@ -25,12 +32,14 @@ namespace Primitive
             StartingCenter = Vector3.zero;
             currentCenter = Vector3.zero;
             direction = Vector3.right.normalized;
-            for (int j = 0; j < nbIterations; j++)
+            for (int j = 0; j < nbIncrement; j++)
             {
-                for (int i = 0; i < 10; i++)
-                { ApplyRule(); }
+                for (int i = 0; i < nbIterations; i++)
+                {
+                    ApplyRule();
+                }
                 currentCenter = StartingCenter - currentCenter;
-                turnRadius -= 2;
+                turnAngle -= 2;
             }
         }
         void ApplyRule()
@@ -41,14 +50,14 @@ namespace Primitive
                 switch (member)
                 {
                     case '-':
-                        this.direction = Tools.TurnRight(direction, turnRadius);
-                        this.currentCenter = this.currentCenter + this.direction * 10;
+                        this.direction = Tools.TurnRight(direction, turnAngle);
+                        this.currentCenter = this.currentCenter + this.direction * buildingsDistance;
                         break;
                     case '+':
-                        this.direction = Tools.TurnLeft(direction, turnRadius);
-                        this.currentCenter = this.currentCenter + this.direction * 10;
+                        this.direction = Tools.TurnLeft(direction, turnAngle);
+                        this.currentCenter = this.currentCenter + this.direction * buildingsDistance;
                         break;
-                    // P stands for Cylindre/polygone
+                    // P stands for random Polygone
                     case 'P':
                         BuildBuilding(null);
                         break;
