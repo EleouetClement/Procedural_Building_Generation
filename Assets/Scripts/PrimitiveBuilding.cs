@@ -6,12 +6,14 @@ public class PrimitiveBuilding : MonoBehaviour
     public Vector3[] vertices;
     public int[] triangles;
     int nbSides;
+    //Radius
     float r;
+    //Height
     float h;
     public Vector2[] uvs;
     Vector3 center;
-    public Texture tex;
     private bool roof = false;
+    //Setting the parameters of user's given values
     public void Initialize(int? nbSides, float r, float h, Vector3 center)
     {
         this.nbSides = nbSides.Value;
@@ -22,13 +24,17 @@ public class PrimitiveBuilding : MonoBehaviour
 
     public void BuildPrimitive()
     {
+        //Setting the vertices' and uvs length
         int nbVertex = nbSides * 2 + 2;
         vertices = new Vector3[nbVertex];
         uvs = new Vector2[nbVertex];
+
         var pi = Mathf.PI;
         float teta;
+        //The uvs X coordination variation step
         float uvXCoord = 1f / (nbSides - 1);
 
+        //Creating vertices and uvs
         for (int i = 0; i < nbSides * 2; i = i + 2)
         {
             teta = pi * i / nbSides;
@@ -37,11 +43,14 @@ public class PrimitiveBuilding : MonoBehaviour
             uvs[i] = new Vector2(i * uvXCoord, 0);
             uvs[i + 1] = new Vector2(i * uvXCoord, 1);
         }
+        //Creating the top and bottom centers vertices (we don't need the uvs here because we don't want to include the top and bottom surfaces for texturing)
         vertices[nbSides * 2] = center + new Vector3(0, h, 0);
         vertices[nbSides * 2 + 1] = center;
 
+        //Setting triangles length
         triangles = new int[nbSides * 12];
         int ti = 0;
+        //Creating sides triangles
         for (int x = 0, vi = 0; x < nbSides; x++, vi += 2)
         {
             if (x == nbSides - 1)
@@ -65,6 +74,7 @@ public class PrimitiveBuilding : MonoBehaviour
             ti += 6;
         }
 
+        //Creating top and bottom surfaces triangles
         for (int x = 0, vi = 0; x < nbSides; x++, vi += 2)
         {
             if (x == nbSides - 1)
@@ -89,6 +99,8 @@ public class PrimitiveBuilding : MonoBehaviour
 
             ti += 6;
         }
+
+        //Finishing up with configuring our object with the right mesh 
         Mesh msh = new Mesh();
 
         msh.vertices = vertices;
@@ -137,27 +149,7 @@ public class PrimitiveBuilding : MonoBehaviour
 
         gameObject.GetComponent<MeshFilter>().mesh = msh;
         gameObject.GetComponent<Renderer>().material = mat;
-        gameObject.GetComponent<Renderer>().material.mainTexture = tex;
         msh.RecalculateNormals();
 
     }
-
-    /*private void OnDrawGizmos()
-    {
-        //Permet de visualiser les sommets
-        for (int i = 0; i < vertices.Length; i++)
-        {
-            if(roof)
-            {
-                Gizmos.color = Color.red;
-            }
-            else
-            {
-                Gizmos.color = Color.white;
-            }
-            
-            Gizmos.DrawSphere(vertices[i], 0.1f);
-            //Handles.Label(vertices[i] - Vector3.up * .01f, i.ToString());
-        }
-    }*/
 }
