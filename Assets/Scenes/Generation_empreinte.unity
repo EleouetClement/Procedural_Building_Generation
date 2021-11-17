@@ -150,6 +150,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -11.977421, y: -15.831855, z: -24.369953}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 2
@@ -166,15 +167,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4386a3a161657d4e946ea945197c788, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 0
-  depth: 0
-  floorsCount: 3
+  width: 6
+  depth: 2
+  floorsCount: 8
   widthStep: 1
   heightStep: 1
   turnRadius: 90
   axiom: S+S+S+S
   pointPrefab: {fileID: 8849277698866286912, guid: 8ecb9981ab3f9054c8cf1c900d72bc94, type: 3}
-  wallPrefab: {fileID: 5605769545234765343, guid: c0fefc4756a8a8a4b978d0fd3dbf28ab, type: 3}
+  wallPrefab: {fileID: 3117730301958794434, guid: c084a94c8dab2764d80eb55fec86a33b, type: 3}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -264,6 +265,7 @@ Transform:
   m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
   m_LocalPosition: {x: 0, y: 3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
@@ -347,6 +349,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0

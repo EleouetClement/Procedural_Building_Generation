@@ -71,8 +71,16 @@ public class Generation_footprint : MonoBehaviour
         for(int floor = 0; floor < this.floorsCount; floor++)
         {
             BuildCurrentFloor(floor);
+            if(floor == this.floorsCount-1)
+            {
+                BuildRoof();
+            }
         }
+        
+
     }
+
+   
 
     private void BuildCurrentFloor(int floorId)
     {
@@ -123,6 +131,12 @@ public class Generation_footprint : MonoBehaviour
             go.name = id.ToString();
             id++;
         }
+    }
+
+    private void BuildRoof()
+    {
+        //Close the top of th building once the last floor as been built
+
     }
 
     private void GenerateFootPrint(Vector3 startPosition, Vector3 startDirection)
