@@ -246,14 +246,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c4fc918819262e45be66a1d5fbc4e12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  axiom: P-C+P+P-P+P-P-P
+  axiom: P-P+P+P
   buildingMaterial: {fileID: 2100000, guid: ac5f3df6aadb64149b3c4b047662c16c, type: 2}
-  length: 14.07
+  length: 47.2
   width: 9.35
   polygoneMinSides: 3
   polygoneMaxSides: 14
-  turnRadius: 80
-  nbIterations: 7
+  turnAngle: 80
+  buildingsDistance: 10
+  nbIncrement: 10
+  nbIterations: 3
   buildingPrefab: {fileID: 5021162606110746199, guid: b2aaa989b8d1ebd4eb6a1f6f87488352, type: 3}
 --- !u!4 &1489018626
 Transform:
