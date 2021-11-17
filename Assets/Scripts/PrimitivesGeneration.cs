@@ -14,15 +14,21 @@ namespace Primitive
         [SerializeField] [Range(1, 100)] private float length;
         //Range of buildings' width
         [SerializeField] [Range(1, 10)] private float width;
+
         [SerializeField] [Range(3, 15)] private int polygoneMinSides;
         [SerializeField] [Range(3, 15)] private int polygoneMaxSides;
+
         //Range of angle's value separation two buildings at each step 
         [SerializeField] [Range(0, 360)] private int turnAngle;
+
         [SerializeField] private int buildingsDistance;
 
-        //
+        //How many districts we want to build
         [SerializeField] [Range(0, 20)] private int nbIncrement;
+
+        //Nb of iteration for districts
         [SerializeField] [Range(0, 20)] private int nbIterations;
+
         public GameObject buildingPrefab;
 
         private Vector3 direction;
@@ -30,10 +36,14 @@ namespace Primitive
         void Start()
         {
             StartingCenter = Vector3.zero;
+            //Axiom, the center to start with
             currentCenter = Vector3.zero;
             direction = Vector3.right.normalized;
+
+            //For nbIncrement time
             for (int j = 0; j < nbIncrement; j++)
             {
+                //We build nbIterations districts
                 for (int i = 0; i < nbIterations; i++)
                 {
                     ApplyRule();
@@ -49,10 +59,12 @@ namespace Primitive
 
                 switch (member)
                 {
+                    //Turn right to build next building
                     case '-':
                         this.direction = Tools.TurnRight(direction, turnAngle);
                         this.currentCenter = this.currentCenter + this.direction * buildingsDistance;
                         break;
+                    //Turn left to build next building
                     case '+':
                         this.direction = Tools.TurnLeft(direction, turnAngle);
                         this.currentCenter = this.currentCenter + this.direction * buildingsDistance;
