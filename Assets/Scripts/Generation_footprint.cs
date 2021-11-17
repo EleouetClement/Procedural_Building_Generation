@@ -127,8 +127,8 @@ public class Generation_footprint : MonoBehaviour
         {
             Vector3 newPos = this.points[i] + (floorNumber * heightStep * Vector3.up);
             this.points.Add(newPos);
-            GameObject go = Instantiate(pointPrefab, newPos, Quaternion.identity);
-            go.name = id.ToString();
+            //GameObject go = Instantiate(pointPrefab, newPos, Quaternion.identity);
+            //go.name = id.ToString();
             id++;
         }
     }
@@ -218,8 +218,8 @@ public class Generation_footprint : MonoBehaviour
     private void newPoint(int id)
     {
         //Instantiate a new point and add it to the List of points
-        GameObject go = Instantiate(pointPrefab, this.position, Quaternion.identity);
-        go.name = id.ToString();
+        //GameObject go = Instantiate(pointPrefab, this.position, Quaternion.identity);
+        //go.name = id.ToString();
         this.points.Add(this.position);
     }
 

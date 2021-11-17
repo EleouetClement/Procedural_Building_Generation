@@ -167,11 +167,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4333f21e294c7444c8ffa3acd9fd6301, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  step: 0.23
-  floorsAxiom: S-S--SS++S----R
+  step: 0.48
+  floorsAxiom: S-P--SS-P--+S++P--R
   footprintAxiom: 
-  floorWidth: 3.96
-  floorHeight: 3.77
+  floorWidth: 4.82
+  floorHeight: 3.27
   roofHeight: 5.92
   polygoneMinSides: 3
   polygoneMaxSides: 6
